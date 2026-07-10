@@ -41,7 +41,7 @@ export default function Navbar({ onDashboard }) {
             <a
               key={link}
               href={`#${link.toLowerCase().replace(/\s+/g, "-")}`}
-              className="..."
+              className="text-white"
             >
               {link}
             </a>

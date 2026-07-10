@@ -1,6 +1,6 @@
 // User location (Jos Plateau State)
 export const USER_LOCATION = {
-  lat: 9.9269,
+   lat: 9.9269,
   lng: 8.8961,
   name: 'Jos Plateau State',
 }
