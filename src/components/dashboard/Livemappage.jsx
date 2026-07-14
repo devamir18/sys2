@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import LiveMap from './Livemap'
+import LiveMap from './LiveMap'
 
 const GET_REPORTS_ENDPOINT = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'}/getreports`
 const fallbackUserLocation = { lat: 0, lng: 0 }
