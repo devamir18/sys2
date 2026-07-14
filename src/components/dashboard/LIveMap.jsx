@@ -101,3 +101,5 @@ export default function LiveMap({center, markers=[]}){
     </MapContainer>
   )
 }
+
+export default LiveMap

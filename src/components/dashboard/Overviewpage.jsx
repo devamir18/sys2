@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, X, MapPin, Camera, Loader2 } from 'lucide-react'
-import Livemap from './Livemap'
+import LiveMap from './Livemap' // Fixed case-sensitivity to match JSX usage
 import { EmergencyHotlineBanner } from './Emergencycall'
 
 const ACTIVE_USER = typeof RESIDENT_ID !== 'undefined' ? RESIDENT_ID : 'Resident';
@@ -33,7 +33,7 @@ export default function OverviewPage({ onNavigate }) {
   const [photoPreview, setPhotoPreview] = useState(null)
   const [coordinates, setCoordinates] = useState(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null)
-  const [isUploading, setIsUploading] = useState(false) // Added upload tracking
+  const [isUploading, setIsUploading] = useState(false)
   const [userLocation, setUserLocation] = useState(null)
   const [incidentFeed, setIncidentFeed] = useState([])
   const [advisories, setAdvisories] = useState([])
@@ -60,9 +60,9 @@ export default function OverviewPage({ onNavigate }) {
           const longitude = item.lng || 0;
           
           const derivedLocation = item.location || item.zone || 
-          ((typeof latitude === 'number' || latitude) && (typeof longitude === 'number' || longitude) 
-            ? `${Number(latitude).toFixed(4)}, ${Number(longitude).toFixed(4)}` 
-            : 'General Zone');
+            ((typeof latitude === 'number' || latitude) && (typeof longitude === 'number' || longitude) 
+              ? `${Number(latitude).toFixed(4)}, ${Number(longitude).toFixed(4)}` 
+              : 'General Zone');
 
           return {
             id: item.id || item._id || Math.random().toString(),
@@ -156,7 +156,7 @@ export default function OverviewPage({ onNavigate }) {
       time: currentTimeString,
       lat: coordinates?.lat || 0,
       lng: coordinates?.lng || 0,
-      image: uploadedImageUrl || '', // Safe: Stripped alternative local blob references
+      image: uploadedImageUrl || '',
     }
 
     const success = await submitReportPayload(payload)
@@ -317,7 +317,6 @@ export default function OverviewPage({ onNavigate }) {
                   <input 
                     ref={fileInputRef} 
                     type="file" 
-                    type="file" 
                     accept="image/*" 
                     capture="environment" 
                     className="hidden" 
@@ -380,7 +379,6 @@ export default function OverviewPage({ onNavigate }) {
                           src={item.image} 
                           alt="Incident evidence" 
                           className="w-full h-full object-cover max-h-44"
-                          /* Using CSS to hide if broken, avoiding inline event layout mutations */
                           onError={(e) => { e.target.classList.add('hidden') }} 
                         />
                       </div>
