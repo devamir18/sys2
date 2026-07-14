@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, X, MapPin, Camera, Loader2 } from 'lucide-react'
 import LiveMap from './Livemap'
-import { EmergencyHotlineBanner } from './EmergencyCall'
+import { EmergencyHotlineBanner } from './Emergencycall'
 
 const ACTIVE_USER = typeof RESIDENT_ID !== 'undefined' ? RESIDENT_ID : 'Resident';
 
