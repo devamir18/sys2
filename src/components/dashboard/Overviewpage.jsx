@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, X, MapPin, Camera, Loader2 } from 'lucide-react'
-import LiveMap from './LiveMap' // Fixed case-sensitivity to match JSX usage
+import LiveMap from "./LiveMap";
 import { EmergencyHotlineBanner } from './Emergencycall'
 
 const ACTIVE_USER = typeof RESIDENT_ID !== 'undefined' ? RESIDENT_ID : 'Resident';
