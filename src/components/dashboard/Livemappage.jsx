@@ -1,63 +1,61 @@
-import { useState, useRef } from 'react'
-import { Camera, X, MapPin } from 'lucide-react'
-import LiveMap from './LiveMap'
-import { EmergencyHotlineBanner } from './EmergencyCall'
-import { USER_LOCATION, liveFeed as initialFeed, initials, avatarColor } from './mockData'
+import { useState, useEffect } from 'react'
+import LiveMap from './Livemap'
 
-export default function LiveMapPage() {
-  const [feed, setFeed] = useState(initialFeed)
-  const [reportText, setReportText] = useState('')
-  const [photoPreview, setPhotoPreview] = useState(null)
-  const fileInputRef = useRef(null)
+const GET_REPORTS_ENDPOINT = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'}/getreports`
+const fallbackUserLocation = { lat: 0, lng: 0 }
 
-  function handlePhotoChange(e) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setPhotoPreview(URL.createObjectURL(file))
-  }
+export default function MapOverviewPage() {
+  const [userLocation, setUserLocation] = useState(null)
+  const [incidentFeed, setIncidentFeed] = useState([])
 
-  function handleSubmitReport() {
-    if (!reportText.trim()) return
-    setFeed((prev) => [
-      {
-        id: Date.now(),
-        author: 'You',
-        location: USER_LOCATION.name,
-        time: 'just now',
-        text: reportText.trim(),
-        image: photoPreview,
-        lat: USER_LOCATION.lat,
-        lng: USER_LOCATION.lng,
-      },
-      ...prev,
-    ])
-    setReportText('')
-    setPhotoPreview(null)
-  }
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const response = await fetch(GET_REPORTS_ENDPOINT, {
+          headers: { Accept: 'application/json' },
+        })
+        if (!response.ok) throw new Error('Unable to load incidents')
+
+        const data = await response.json()
+        const rawIncidents = Array.isArray(data)
+          ? data
+          : data.reports || data.incidents || data.data || []
+          
+        const normalizedIncidents = rawIncidents.map((item) => ({
+          id: item.id || item._id || Math.random().toString(),
+          author: item.author || 'Anonymous',
+          type: item.type || 'Alert',
+          text: item.text || item.desc || item.description || '',
+          lat: item.lat || 0,
+          lng: item.lng || 0,
+        }))
+
+        setUserLocation(data.userLocation || null)
+        setIncidentFeed(normalizedIncidents)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    loadData()
+  }, [])
 
   return (
-    <div className="p-4 md:p-6 space-y-4 h-full flex flex-col">
-      <EmergencyHotlineBanner compact />
-
-      <div className="flex-1 flex gap-4  flex-col lg:flex-row">
-        {/* Left: map + report */}
-        <div className="flex-1 flex flex-col gap-4 min-w-0">
-          <div className="rounded-xl border border-white/5 bg-[#0D1526] p-4 flex-1 flex flex-col h-full">
-            <div className="flex items-center justify-between mb-3 text-xs">
-              <span className="text-slate-400">
-                Your Location:{' '}
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mx-1 align-middle" />
-                <span className="text-white font-medium">{USER_LOCATION.name}</span>
-              </span>
-              <span className="text-slate-500 font-mono">
-                {USER_LOCATION.lat.toFixed(4)}°, {USER_LOCATION.lng.toFixed(4)}°
-              </span>
-            </div>
-            <div className="flex-1 rounded-lg overflow-hidden min-h-[260px]">
-              <LiveMap center={USER_LOCATION} markers={feed} />
-            </div>
-          </div>
-        </div>    
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      <div className="rounded-xl border border-white/5 bg-[#0D1526] p-4 flex flex-col h-[500px]">
+        <div className="flex items-center justify-between mb-3 text-xs">
+          <span className="text-slate-400">
+            Your Location:{' '}
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mx-1 align-middle" />
+            <span className="text-white font-medium">
+              {userLocation?.name || (userLocation ? `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}` : 'Your current area')}
+            </span>
+          </span>
+          <span className="text-slate-500 font-mono">Live map view</span>
+        </div>
+        <div className="flex-1 rounded-lg overflow-hidden relative bg-[#111827]">
+          <LiveMap center={userLocation || fallbackUserLocation} markers={incidentFeed} />
+        </div>
       </div>
     </div>
   )

@@ -7,7 +7,7 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.7, delay, ease: 'easeOut' }
 })
 
-export default function Hero() {
+export default function Hero({ onOpenLogin }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 pt-24 pb-16">
       {/* Background grid */}
@@ -44,16 +44,19 @@ export default function Hero() {
 
         {/* CTAs */}
         <motion.div {...fadeUp(0.45)} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-        <button
-          onClick={() => setReportOpen(true)}
-          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all hover:shadow-lg hover:shadow-red-500/25"
-        >
-          <AlertTriangle size={15} />
-          Report Incident
-        </button>
-          <button className="flex items-center gap-2 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white font-medium px-8 py-4 rounded-xl transition-all duration-200 text-base bg-white/5 hover:bg-white/10">
+          <button
+            onClick={() => setReportOpen(true)}
+            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all hover:shadow-lg hover:shadow-red-500/25"
+          >
+            <AlertTriangle size={15} />
+            Report Incident
+          </button>
+          <button
+            onClick={() => onOpenLogin?.()}
+            className="flex items-center gap-2 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white font-medium px-8 py-4 rounded-xl transition-all duration-200 text-base bg-white/5 hover:bg-white/10"
+          >
             <MapPin size={18} />
-            View Live Map
+            Connect to Dashboard
           </button>
         </motion.div>
 

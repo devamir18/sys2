@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Shield, Menu, X } from 'lucide-react'
 
-export default function Navbar({ onDashboard }) {
+export default function Navbar({ onDashboard, onOpenLogin }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -51,7 +51,7 @@ export default function Navbar({ onDashboard }) {
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
           <button
-            onClick={onDashboard}
+            onClick={() => onOpenLogin?.()}
             className="text-sm text-slate-400 hover:text-white transition-colors font-medium px-4 py-2 border border-white/10 hover:border-white/20 rounded-lg"
           >
             Dashboard
@@ -88,7 +88,7 @@ export default function Navbar({ onDashboard }) {
               </a>
             ))}
             <button
-              onClick={() => { onDashboard(); setMenuOpen(false) }}
+              onClick={() => { onOpenLogin?.(); setMenuOpen(false) }}
               className="text-sm border border-white/10 text-slate-300 font-semibold px-5 py-2.5 rounded-lg"
             >
               Dashboard
