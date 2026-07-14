@@ -414,14 +414,14 @@ export default function OverviewPage({ onNavigate }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 pointer-events-auto"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 pointer-events-auto"
             onClick={(e) => e.target === e.currentTarget && setReportOpen(false)}
           >
             <motion.div
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              className="bg-[#0D1526] border border-white/10 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden"
+              className="bg-[#0D1526] border border-white/10 rounded-2xl w-full max-w-md shadow-2xl z-50 overflow-hidden"
             >
               <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
                 <span className="font-semibold text-white" style={{ fontFamily: 'Space Grotesk' }}>Report an Incident</span>
