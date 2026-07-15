@@ -20,21 +20,28 @@ const leaderLinks = [
   { key: 'settings', icon: Settings, label: 'Settings' },
 ]
 
-export default function Sidebar({ role, open, activePage, onNavigate }) {
-  const { currentUser, logoutUser } = useAuth() // ⚡ Access current user record and sign-out method
+// ✅ Added 'user' to the destructured props so it captures the prop passed from DashboardLayout
+export default function Sidebar({ role, open, activePage, onNavigate, user }) {
+  const { currentUser, logoutUser } = useAuth() 
+  
+  // ✅ Dynamically choose the prop 'user' first, falling back to context 'currentUser'
+  const activeUser = user || currentUser;
+
   const links = role === 'resident' ? residentLinks : leaderLinks
 
- const getInitials = () => {
-  const dynamicName = currentUser?.username || currentUser?.name;
-  if (!dynamicName) return role === 'resident' ? 'RA' : 'SL';
-  return dynamicName
-    .split(' ')
-    .filter(Boolean)
-    .map(n => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
-}
+  const getInitials = () => {
+    // ✅ Use the unified activeUser reference
+    const dynamicName = activeUser?.username || activeUser?.name || activeUser?.fullName;
+    if (!dynamicName) return role === 'resident' ? 'RA' : 'SL';
+    
+    return dynamicName
+      .split(' ')
+      .filter(Boolean)
+      .map(n => n[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+  }
 
   return (
     <motion.aside
@@ -80,12 +87,16 @@ export default function Sidebar({ role, open, activePage, onNavigate }) {
           </div>
           <div className="overflow-hidden">
             {/* Real-time reactive username field */}
-           <div className="text-sm font-medium text-white truncate">
-  {currentUser?.username || currentUser?.name || (role === 'resident' ? 'Resident User' : 'Security Leader')}
-</div>
+            <div className="text-sm font-medium text-white truncate">
+              {/* ✅ Fallbacks covering multiple DB conventions (username, name, fullName) */}
+              {activeUser?.username || 
+               activeUser?.name || 
+               activeUser?.fullName || 
+               (role === 'resident' ? 'Resident User' : 'Security Leader')}
+            </div>
             {/* Dynamic context location tracking */}
             <div className="text-xs text-slate-500 truncate">
-              {currentUser?.activeLocation || 'Gwarinpa Estate'}
+              {activeUser?.activeLocation || 'Gwarinpa Estate'}
             </div>
           </div>
         </div>
