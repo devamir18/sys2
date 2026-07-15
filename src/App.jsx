@@ -107,8 +107,8 @@ function EmbeddedLoginForm() {
 
     try {
       const endpoint = isSignUp 
-        ? 'http://localhost:4000/signup' 
-        : 'http://localhost:4000/login';
+        ? 'https://security-sys.onrender.com/signup' 
+        : 'https://security-sys.onrender.com/login';
       
       const payload = isSignUp 
         ? { username: fullName.trim(), email: email.trim(), password, activeLocation: dynamicLocation }
