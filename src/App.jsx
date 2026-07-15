@@ -263,14 +263,33 @@ function DashboardLayout() {
   
   // DYNAMIC FIX: Derive baseline initialization and sync seamlessly via context updates
   const [role, setRole] = useState(currentUser?.role || 'resident');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('overview');
+
+  // ✅ Initialize sidebar closed on small screens, open on medium screens and up
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (currentUser?.role) {
       setRole(currentUser.role);
     }
   }, [currentUser]);
+
+  // ✅ Keep sidebar synced with viewport size adjustments
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+
+    // Run initial assessment
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const renderPage = () => {
     switch (activePage) {
@@ -297,15 +316,39 @@ function DashboardLayout() {
 
   return (
     <div className="flex h-screen bg-[#060b14] overflow-hidden font-['Inter'] relative z-0">
-      <div className="relative z-10">
+      
+      {/* 1. Mobile Sidebar Overlay Drawer (Absolute positioning floating layer) */}
+      <div 
+        className={`
+          fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out
+          md:relative md:translate-x-0 md:z-10
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}
+      >
         <Sidebar 
           role={role} 
           open={sidebarOpen} 
           activePage={activePage} 
-          onNavigate={setActivePage} 
+          onNavigate={(page) => {
+            setActivePage(page);
+            // On mobile viewports, automatically dismiss sidebar drawer on navigate
+            if (window.innerWidth < 768) {
+              setSidebarOpen(false);
+            }
+          }} 
           user={currentUser} 
         />
       </div>
+
+      {/* 2. Sleek backdrop that dissolves background on Mobile screens when Sidebar is active */}
+      {sidebarOpen && (
+        <div 
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+        />
+      )}
+
+      {/* 3. Main Dashboard Application Window */}
       <div className="flex-1 flex flex-col overflow-hidden relative z-0">
         <TopBar role={role} setRole={setRole} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <main className="flex-1 overflow-y-auto overflow-x-hidden">
