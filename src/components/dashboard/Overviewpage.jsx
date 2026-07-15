@@ -6,7 +6,7 @@ import { EmergencyHotlineBanner } from './Emergencycall'
 
 const ACTIVE_USER = typeof RESIDENT_ID !== 'undefined' ? RESIDENT_ID : 'Resident';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://security-sys.onrender.com'
 const REPORTS_ENDPOINT = `${API_BASE_URL}/reports`
 const GET_REPORTS_ENDPOINT = `${API_BASE_URL}/getreports`
 const IMAGE_UPLOAD_URL = import.meta.env.VITE_IMAGE_UPLOAD_URL || `${API_BASE_URL}/api/reports`
