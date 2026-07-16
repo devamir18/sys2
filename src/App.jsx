@@ -261,8 +261,8 @@ function EmbeddedLoginForm() {
 function DashboardLayout() {
   const { currentUser } = useAuth();
   
-  // DYNAMIC FIX: Derive baseline initialization and sync seamlessly via context updates
-  const [role, setRole] = useState(currentUser?.role || 'res   ident');
+  // FIXED: Removed broken spaces inside string fallback initialization to clamp layout on clean mounts
+  const [role, setRole] = useState(currentUser?.role || 'resident');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('overview');
 
