@@ -280,7 +280,7 @@ export default function OverviewPage({ onNavigate }) {
               </button>
             </div>
             
-            <div className="h-96 w-full relative">
+            <div className="h-96 w-full relative z-0 isolate">
               <LiveMap 
                 center={userLocation || fallbackUserLocation}
                 markers={incidentFeed}

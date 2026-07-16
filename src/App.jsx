@@ -262,7 +262,7 @@ function DashboardLayout() {
   const { currentUser } = useAuth();
   
   // DYNAMIC FIX: Derive baseline initialization and sync seamlessly via context updates
-  const [role, setRole] = useState(currentUser?.role || 'resident');
+  const [role, setRole] = useState(currentUser?.role || 'res   ident');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('overview');
 
